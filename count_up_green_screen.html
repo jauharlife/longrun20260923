@@ -1,0 +1,170 @@
+```html
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Count Up Timer - Green Screen</title>
+
+<style>
+  :root { --key-green: #00ff00; }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  body {
+    background: var(--key-green);
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .wrap {
+    width: min(94vw, 1120px);
+    text-align: center;
+  }
+
+  .start {
+    display: inline-block;
+    background: rgba(0, 0, 0, .82);
+    border-radius: 999px;
+    padding: 12px 24px;
+    margin-bottom: 18px;
+    font-weight: 700;
+    font-size: clamp(14px, 2.3vw, 27px);
+    white-space: nowrap;
+  }
+
+  .timer {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(2px, 1.5vw, 18px);
+    align-items: center;
+    background: rgba(0, 0, 0, .86);
+    border-radius: 28px;
+    padding: clamp(18px, 3vw, 40px) clamp(10px, 2.2vw, 30px) 22px;
+  }
+
+  .unit {
+    min-width: 0;
+  }
+
+  .number {
+    font-family: "Courier New", monospace;
+    font-weight: 800;
+    font-size: clamp(34px, 8.6vw, 112px);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    text-shadow: 0 2px 2px rgba(0,0,0,.35);
+  }
+
+  .label {
+    margin-top: 14px;
+    font-size: clamp(10px, 1.8vw, 24px);
+    font-weight: 700;
+    letter-spacing: .06em;
+  }
+
+  @media (max-width: 520px) {
+    .start {
+      white-space: normal;
+      border-radius: 18px;
+    }
+
+    .timer {
+      border-radius: 18px;
+    }
+
+    .label {
+      letter-spacing: 0;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+  <main class="wrap" aria-label="Timer count up">
+
+    <div class="start">
+      🗓 Mulai: Rabu, 23 September 2026 08:14:00 WIB
+    </div>
+
+    <section class="timer" aria-live="off">
+
+      <div class="unit">
+        <div class="number" id="days">00</div>
+        <div class="label">HARI</div>
+      </div>
+
+      <div class="unit">
+        <div class="number" id="hours">00</div>
+        <div class="label">JAM</div>
+      </div>
+
+      <div class="unit">
+        <div class="number" id="minutes">00</div>
+        <div class="label">MENIT</div>
+      </div>
+
+      <div class="unit">
+        <div class="number" id="seconds">00</div>
+        <div class="label">DETIK</div>
+      </div>
+
+    </section>
+
+  </main>
+
+<script>
+  // ==========================================
+  // START TIMER
+  // Rabu, 23 September 2026 08:14:00 UTC+7
+  // = 23 September 2026 01:14:00 UTC
+  // ==========================================
+
+  const startTime = Date.UTC(2026, 8, 23, 1, 14, 0);
+
+  const pad = n => String(n).padStart(2, "0");
+
+  function updateTimer() {
+
+    const elapsed = Math.max(0, Date.now() - startTime);
+
+    const totalSeconds = Math.floor(elapsed / 1000);
+
+    const days = Math.floor(totalSeconds / 86400);
+
+    const hours = Math.floor(
+      (totalSeconds % 86400) / 3600
+    );
+
+    const minutes = Math.floor(
+      (totalSeconds % 3600) / 60
+    );
+
+    const seconds = totalSeconds % 60;
+
+    document.getElementById("days").textContent = pad(days);
+    document.getElementById("hours").textContent = pad(hours);
+    document.getElementById("minutes").textContent = pad(minutes);
+    document.getElementById("seconds").textContent = pad(seconds);
+  }
+
+  updateTimer();
+
+  setInterval(updateTimer, 250);
+</script>
+
+</body>
+</html>
